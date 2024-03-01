@@ -1,21 +1,165 @@
+@import './animations.scss';
+
 .player{
+  animation: slideUp 0.8s ease forwards;
   position: fixed;
   bottom: 25px;
   background-color: #f0f0f0;
   color:#121318;
+  border: 1px solid #ccc;
   left:7%;
   width:85%;
-  height:5%;
+  // height:5%;
   border-radius:25px;
   display:flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-right: 20px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
 }
 
-.playPause{
-  all: unset;
-  &_text{
-    font-size: 35px;
+.title{
+  margin-right:5%;
+  font-weight:600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timeline{
+  align-items: center;
+  display:flex;
+  &_progress {
+    margin: 0px 15px 0px 15px;
+    height: 5px;
+    width: 48vw;
   }
+}
+
+.buttons{
+  all: unset;
+  font-size: 35px;
+  &_first{
+    @extend .buttons;
+    margin-left:5%;
+  }
+  &_container1{
+    position:relative;
+    display:flex;
+  }
+  &_container2 {
+    position: relative;
+    display: flex;
+  }
+}
+
+.popover {
+  text-align: center;
+  z-index:999;
+  position: absolute;
+  top: -160%;
+  left: -100%;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: #CCCCCC;
+  border-radius: 1px;
+  border: 0px solid #000000;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px #F2F2F2;
+  border: 1px solid #CCCCCC;
+  height: 18px;
+  width: 18px;
+  border-radius: 25px;
+  background: #000000;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -7px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #CCCCCC;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: #CCCCCC;
+  border-radius: 1px;
+  border: 0px solid #000000;
+}
+
+input[type=range]::-moz-range-thumb {
+  box-shadow: 0px 0px 0px #F2F2F2;
+  border: 1px solid #CCCCCC;
+  height: 18px;
+  width: 18px;
+  border-radius: 25px;
+  background: #000000;
+  cursor: pointer;
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range]::-ms-fill-lower {
+  background: #CCCCCC;
+  border: 0px solid #000000;
+  border-radius: 2px;
+  box-shadow: 0px 0px 0px #000000;
+}
+
+input[type=range]::-ms-fill-upper {
+  background: #CCCCCC;
+  border: 0px solid #000000;
+  border-radius: 2px;
+  box-shadow: 0px 0px 0px #000000;
+}
+
+input[type=range]::-ms-thumb {
+  margin-top: 1px;
+  box-shadow: 0px 0px 0px #F2F2F2;
+  border: 1px solid #CCCCCC;
+  height: 18px;
+  width: 18px;
+  border-radius: 25px;
+  background: #000000;
+  cursor: pointer;
+}
+
+input[type=range]:focus::-ms-fill-lower {
+  background: #CCCCCC;
+}
+
+input[type=range]:focus::-ms-fill-upper {
+  background: #CCCCCC;
 }

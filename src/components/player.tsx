@@ -10,6 +10,9 @@ export default function Player() {
   const [isPlaying, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
+  const [isVolumeHovered, setIsVolumeHovered] = useState(false);
+  const [isPanningHovered, setIsPanningHovered] = useState(false);
+
 
   const selectedMusic = useContext<any>(MusicContext).selectedMusic;
   const playerCtx = useContext<any>(PlayerContext);
@@ -20,7 +23,7 @@ export default function Player() {
 
   const audioRef = useRef<any>(null);
   const playPauseRef = useRef<any>(null);
-
+  const popoverRef = useRef<any>(null);
   useEffect(() => {
     const audioElement = audioRef.current;
 
@@ -43,7 +46,6 @@ export default function Player() {
     if (audioElement) {
       if (!audioElement.sourceNode) {
         console.log('set default mediaElementSource')
-
         //Media Element Source 생성
         const source = audioContext.createMediaElementSource(audioElement);
         audioElement.sourceNode = source;
@@ -107,19 +109,26 @@ export default function Player() {
   }, [volume, panning, comp, reverb]);
 
   useEffect(() => {
-
     setPlaying(false);
     setCurrentTime(0);
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      // canplay 이벤트가 발생하면 duration 값을 설정
+      const handleCanPlay = () => {
+        setTotalDuration(audioElement.duration);
+      };
+
+      audioElement.addEventListener('canplay', handleCanPlay);
+
+      // Cleanup 이벤트 리스너
+      return () => {
+        audioElement.removeEventListener('canplay', handleCanPlay);
+      };
+    }
   }, [selectedMusic])
 
   useEffect(() => {
     const audioElement = audioRef.current;
-    setTotalDuration(audioElement.duration);
-  },[])
-
-  useEffect(() => {
-    const audioElement = audioRef.current;
-    console.log(audioElement.duration);
     if (audioElement) {
       // 오디오의 전체 재생 시간
       setTotalDuration(audioElement.duration);
@@ -137,7 +146,8 @@ export default function Player() {
   const handlePlayPause = () => {
     const audioElement = audioRef.current;
     const playPauseElement = playPauseRef.current;
-
+    if (currentTime === totalDuration) //모두 재생시 처음으로
+      setCurrentTime(0);
     if (audioElement && playPauseElement) {
       if (audioContext.state === "suspended") {
         audioContext.resume();
@@ -165,30 +175,69 @@ export default function Player() {
     const newVolume = parseFloat(e.currentTarget.value);
     setVolume(newVolume);
   }
+  const toggleVolume = (e: any) => {
+    if (volume !== 0)
+      setVolume(0);
+    else
+      setVolume(1);
+  }
 
   const handlePanning = (e: any) => {
     const newPanning = parseFloat(e.currentTarget.value);
     setPanning(newPanning);
   }
+  const togglePanning = (e: any) => {
+    if (panning !== 0)
+      setPanning(0);
+  }
+  const handleMouseOut = (e:any) => {
+    if (popoverRef.current && popoverRef.current.contains(e.relatedTarget)) {
+      // 마우스가 popover 안으로 들어온 경우는 무시
+      return;
+    }
+    setIsVolumeHovered(false);
+    setIsPanningHovered(false);
+  };
 
   return (
     <div className={styles.player}>
-      <audio ref={audioRef} src={selectedMusic.music}/>
-      <span>{selectedMusic.title}</span>
-      <input type="range" id="progress" min="0" max={totalDuration} value={currentTime} step="0.01" onChange={handleTime}/>
-      <span>
-        {formatTime(currentTime)} / {formatTime(totalDuration)}
-      </span>
-      <button className={styles.playPause} ref={playPauseRef} onClick={handlePlayPause}>
+      <audio ref={audioRef} src={selectedMusic.music} />
+      <button className={styles.buttons_first} ref={playPauseRef} onClick={handlePlayPause}>
         {isPlaying === true ?
-          <i className={`bi bi-pause-fill ${styles.playPause_text}`}></i> :
-          <i className={`bi bi-play-fill ${styles.playPause_text}`}></i>}
+          <i className={`bi bi-pause-fill`}></i> :
+          <i className={`bi bi-play-fill`}></i>}
       </button>
-      <input type="range" id="volume" min="0" max="1" value={volume} step="0.01" onChange={handleVolume} />
-      <span>Volume: {Math.floor(volume*100)}</span>
-      <input type="range" id="panner" min="-1" max="1" value={panning} step="0.01" onChange={handlePanning} />
-      <button type="button" onClick={()=>setPanning(0)}>set Pan to default</button>
-      <span>Pan: {Math.floor(panning*64)}</span>
+      <div className={styles.timeline}>
+        <span>{formatTime(currentTime)}</span>
+        {!isNaN(totalDuration) && <input className={styles.timeline_progress} type="range" id="progress" min="0" max={totalDuration} value={currentTime} step="0.01" onChange={handleTime} />}
+        <span>{formatTime(totalDuration)}</span>
+      </div>
+
+      <div className={styles.buttons_container1} onMouseOut={handleMouseOut}>
+        <button className={styles.buttons} onMouseOver={() => setIsVolumeHovered(true)} onClick={toggleVolume}>
+          {volume === 1 ?
+            <i className="bi bi-volume-up-fill"></i> :
+            (volume === 0 ? <i className="bi bi-volume-mute-fill"></i>
+              : <i className="bi bi-volume-down-fill"></i>)}
+        </button>
+        {isVolumeHovered && <div ref={popoverRef} className={styles.popover}>
+          <span>Volume</span> <input type="range" id="volume" min="0" max="1" value={volume} step="0.01" onChange={handleVolume} />
+        </div>}
+        {/* <span>Volume: {Math.floor(volume * 100)}</span> */}
+      </div>
+
+      <div className={styles.buttons_container2} onMouseOut={handleMouseOut}>
+        <button className={styles.buttons} onMouseOver={() => setIsPanningHovered(true)} onClick={togglePanning}>
+          {panning === 0 ? < i className="bi bi-arrows"></i> :
+            (panning > 0 ? < i className="bi bi-arrow-right-short"></i>
+              : < i className="bi bi-arrow-left-short"></i>)}
+        </button>
+        {isPanningHovered && <div ref={popoverRef} className={styles.popover}>
+          <span>Panning</span> <input type="range" id="panner" min="-1" max="1" value={panning} step="0.01" onChange={handlePanning} />
+        </div>}
+        {/* <span>Pan: {Math.floor(panning * 64)}</span> */}
+      </div>
+      <span className={styles.title}>{selectedMusic.title}</span>
     </div>
   )
 }

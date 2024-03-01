@@ -8,8 +8,12 @@ export default function LoadTracklist() {
   const ctx = useContext<any>(MusicContext);
   return (
     <div>
-      {tracklist.taeon.map((music) => <img key={music.title} width="500" src={music.img} alt='img' onClick={()=>ctx.setSelectedMusic(music)} />)}
-      {tracklist.arbor.map((music) => <img key={music.title} width="500" src={music.img} alt='img' onClick={()=>ctx.setSelectedMusic(music)} />)}
+      <div>
+        {tracklist.taeon.map((music) => <img key={music.title} width="400" src={music.img} alt='img' onClick={()=>ctx.setSelectedMusic(music)} />)}
+      </div>
+      <div>  
+        {tracklist.arbor.map((music) => <img key={music.title} width="400" src={music.img} alt='img' onClick={() => ctx.setSelectedMusic(music)} />)}
+      </div>
     </div>
   )
 }
