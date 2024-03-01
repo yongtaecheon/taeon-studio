@@ -3,7 +3,7 @@
 this is a music streaming studio for my musics
 
 ## Used Skill Stacks
-- Next.js 14
+- React.js
 - Typescript, HTML, SCSS
 - Web Audio API
 
