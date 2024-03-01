@@ -1,0 +1,21 @@
+.player{
+  position: fixed;
+  bottom: 25px;
+  background-color: #f0f0f0;
+  color:#121318;
+  left:7%;
+  width:85%;
+  height:5%;
+  border-radius:25px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.playPause{
+  all: unset;
+  &_text{
+    font-size: 35px;
+  }
+}

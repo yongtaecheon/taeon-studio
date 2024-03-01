@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React from "react";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navigation from './components/navigation';
+import Footer from './components/footer';
+import Player from './components/player';
+import { PlayerProvider } from "./contexts/playerContext";
+import { MusicProvider } from "./contexts/musicContext";
+import Main from './pages/main';
+import About from './pages/about';
+import Lab from './pages/lab';
+import Tracks from './pages/tracks';
 
-function App() {
+export default function App() {
+  console.log('App.tsx rendered');
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <BrowserRouter>
+        <Navigation />
+        <PlayerProvider>
+          <MusicProvider>
+            <Routes>
+              <Route path="/" element={<Main />}></Route>
+              <Route path="/about" element={<About />}></Route>
+              <Route path="/lab" element={<Lab />}></Route>
+              <Route path="/tracks" element={<Tracks/>}></Route>
+            </Routes>
+            <Player />
+          </MusicProvider>
+        </PlayerProvider>
+      </BrowserRouter>
+      <Footer />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"></link>
     </div>
-  );
+  )
 }
-
-export default App;

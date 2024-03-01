@@ -1,0 +1,25 @@
+@import './animations.scss';
+
+.main{
+  color:white;
+  background-image: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)),
+    url(../assets/img/main_bg.PNG);
+  height:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.texts{
+  animation: slideUp 0.8s ease forwards;
+  text-align: center;
+  font-size:20px;
+  &_h1 {
+    @extend .texts;
+    font-size: 150px;
+    margin-bottom:10px;
+  }
+}
