@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navigation from './components/navigation';
+import {Routes, Route, useLocation } from 'react-router-dom';
+import Header from './components/header';
 import Footer from './components/footer';
 import Player from './components/player';
 import { PlayerProvider } from "./contexts/playerContext";
@@ -12,11 +12,11 @@ import Lab from './pages/lab';
 import Tracks from './pages/tracks';
 
 export default function App() {
+  const pathname = useLocation().pathname;
   console.log('App.tsx rendered');
   return (
     <div className='App'>
-      <BrowserRouter>
-        <Navigation />
+        {pathname !== '/' && <Header />}
         <PlayerProvider>
           <MusicProvider>
             <Routes>
@@ -28,8 +28,7 @@ export default function App() {
             <Player />
           </MusicProvider>
         </PlayerProvider>
-      </BrowserRouter>
-      <Footer />
+      {pathname !== '/' && <Footer />}
     </div>
   )
 }

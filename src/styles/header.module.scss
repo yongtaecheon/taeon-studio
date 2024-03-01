@@ -1,0 +1,13 @@
+.header{
+  display:flex;
+  justify-content: space-between;
+}
+.ul {
+  display:flex;
+  float:right;
+}
+.li {
+  margin-right: 20px;
+  font-size: clamp(1rem, 20px, 2rem);
+  list-style: none;
+}

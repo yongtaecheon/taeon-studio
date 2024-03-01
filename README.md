@@ -8,5 +8,7 @@ this is a music streaming studio for my musics
 - Web Audio API
 
 ## npm requirements
-- `npm i sass`
+- `npm i node-sass`
+- `npm i sass-loader`
+- `npm i react-router-dom@6`
 - `npm i file-loader`
