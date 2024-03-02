@@ -221,9 +221,8 @@ export default function Player() {
               : <i className="bi bi-volume-down-fill"></i>)}
         </button>
         {isVolumeHovered && <div ref={popoverRef} className={styles.popover}>
-          <span>Volume</span> <input type="range" id="volume" min="0" max="1" value={volume} step="0.01" onChange={handleVolume} />
+          <span>Volume: {Math.floor(volume * 100)}</span>   <input type="range" id="volume" min="0" max="1" value={volume} step="0.01" onChange={handleVolume} />
         </div>}
-        {/* <span>Volume: {Math.floor(volume * 100)}</span> */}
       </div>
 
       <div className={styles.buttons_container2} onMouseOut={handleMouseOut}>
@@ -233,9 +232,8 @@ export default function Player() {
               : < i className="bi bi-arrow-left-short"></i>)}
         </button>
         {isPanningHovered && <div ref={popoverRef} className={styles.popover}>
-          <span>Panning</span> <input type="range" id="panner" min="-1" max="1" value={panning} step="0.01" onChange={handlePanning} />
+          <span>Panning {Math.floor(panning * 64)}</span> <input type="range" id="panner" min="-1" max="1" value={panning} step="0.01" onChange={handlePanning} />
         </div>}
-        {/* <span>Pan: {Math.floor(panning * 64)}</span> */}
       </div>
       <span className={styles.title}>{selectedMusic.title}</span>
     </div>

@@ -6,12 +6,12 @@
   margin: 0 auto;
   left: 0;
   right: 0;
-  bottom: 25px;
+  bottom: 3vh;
   background-color: #f0f0f0;
   color:#121318;
   border: 1px solid #ccc;
-  width:85%;
-  height:5%;
+  width:85vw;
+  height:clamp(3vh, 4vw, 5vh);
   border-radius:25px;
   display:flex;
   justify-content: space-between;
@@ -20,8 +20,8 @@
 }
 
 .title{
-  font-size:14px;
-  margin-right:5%;
+  font-size:0.8em;
+  margin-right:4vw;
   font-weight:600;
   white-space: nowrap;
   overflow: hidden;
@@ -32,18 +32,20 @@
   align-items: center;
   display:flex;
   &_progress {
-    margin: 0px 15px 0px 15px;
-    height: 5px;
+    margin: 0px 1vw 0px 1vw;
     width: 48vw;
   }
+  margin-left:1vw;
+  margin-right:1vw;
 }
 
 .buttons{
   all: unset;
-  font-size: 30px;
+  font-size: clamp(10px, 3vw, 30px);
+  margin-right:0.5vw;
   &_first{
     @extend .buttons;
-    margin-left:5%;
+    margin-left:4vw;
   }
   &_container1{
     position:relative;
@@ -56,6 +58,7 @@
 }
 
 .popover {
+  height:3vw;
   text-align: center;
   z-index:999;
   position: absolute;
@@ -65,6 +68,7 @@
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
 }
 
 input[type=range]:focus {
@@ -88,8 +92,8 @@ input[type=range] {
 input[type=range]::-webkit-slider-thumb {
   box-shadow: 0px 0px 0px #F2F2F2;
   border: 1px solid #CCCCCC;
-  height: 18px;
-  width: 18px;
+  height: clamp(4px,2vh, 20px);
+  width: clamp(8px, 3vw, 20px);
   border-radius: 25px;
   background: #000000;
   cursor: pointer;
@@ -114,8 +118,8 @@ input[type=range]::-moz-range-track {
 input[type=range]::-moz-range-thumb {
   box-shadow: 0px 0px 0px #F2F2F2;
   border: 1px solid #CCCCCC;
-  height: 18px;
-  width: 18px;
+  height: clamp(4px, 2vh, 20px);
+  width: clamp(8px, 3vw, 20px);
   border-radius: 25px;
   background: #000000;
   cursor: pointer;
@@ -148,8 +152,8 @@ input[type=range]::-ms-thumb {
   margin-top: 1px;
   box-shadow: 0px 0px 0px #F2F2F2;
   border: 1px solid #CCCCCC;
-  height: 18px;
-  width: 18px;
+  height: clamp(4px, 2vh, 20px);
+  width: clamp(8px, 3vw, 20px);
   border-radius: 25px;
   background: #000000;
   cursor: pointer;

@@ -1,19 +1,15 @@
-
 body{
   font-family: "Poppins", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 500;
-  // font-size:16px;
-  font-style: normal;
+  // font-size:1vw;
+  font-size: clamp(12px, 1vw, 16px);
+  // white-space: pre-wrap;
   margin: 0;
   color: #121318;
   background-color: #f0f0f0;
-  // justify-content: center;
-  // display: flex;
 }
 .App{
   height: 100vh;
-  font-size: 16 px;
 }
 
 a{
