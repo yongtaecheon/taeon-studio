@@ -8,15 +8,17 @@ export default function Main() {
   const navigate = useNavigate();
   return (
     <div className={styles.main}>
-      <div className={styles.texts}>
-        <h1 className={styles.texts_h1}>Taeon Studio</h1>
-        <span>this is taeon's music studio. <br/>this studio has songs covered and arranged by me. <br/>You can access the various audio effects on Lab.</span>
-      </div>
       <div className={styles.overlay}>
         <div className={styles.nav}>
-          <h1 onClick={() => navigate('/about')}>About</h1>
-          <h1 onClick={() => navigate('/tracks')}>Tracks</h1>
-          <h1 onClick={() => navigate('/about')}>Lab</h1>
+          <span className={styles.nav_items} onClick={() => navigate('/about')}>About</span>
+          <span className={styles.nav_items} onClick={() => navigate('/tracks')}>Tracks</span>
+          <span className={styles.nav_items} onClick={() => navigate('/about')}>Lab</span>
+        </div>
+      </div>
+      <div className={styles.textbox}>
+        <div className={styles.texts}>
+          <h1 className={styles.texts_h1}>Taeon Studio</h1>
+          <span>this is taeon's music studio. <br/>this studio has songs covered and arranged by me. <br/>You can access the various audio effects on Lab.</span>
         </div>
       </div>
     </div>

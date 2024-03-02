@@ -1,0 +1,36 @@
+.tracks{
+  text-align:center;
+}
+.tracklist{
+  &_container{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+  }
+  display:grid;
+  gap:10px;
+  grid-template-columns: repeat(5, 1fr);
+  @media (max-width : 2000px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (max-width : 1600px){
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width : 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width : 800px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.image{
+  width: 400px;
+  border: 0.1px solid #959595;
+  transition: filter .3s ease;
+  &_container{
+    :hover {
+        filter: brightness(30%);
+      }
+  }
+}

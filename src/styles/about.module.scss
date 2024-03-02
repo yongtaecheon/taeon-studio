@@ -1,0 +1,25 @@
+.about{
+  text-align: center;
+  line-height: 1;
+  @media(min-width:1200px){
+    padding-bottom: 20vh;
+  }
+}
+
+.img{
+  width:90vw;
+}
+
+.footer {
+  border-top: 1px solid #ccc;
+  font-size: 1em;
+  &_a {
+    font-weight: 600;
+  }
+
+  &_icon {
+    margin: 5px;
+    font-size: 2em;
+    color: #626262;
+  }
+}

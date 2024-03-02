@@ -1,11 +1,12 @@
 import React from 'react';
 import LoadTracklist from "../components/loadTracklist"
+import styles from '../styles/tracks.module.scss';
 
 export default function Tracks() {
   return (
-    <div>
+    <div className={styles.tracks}>
       <h1>Tracks</h1>
-      <span>select songs to listen</span>
+      <p>Select songs to listen!</p>
       <LoadTracklist/>
     </div>
   )

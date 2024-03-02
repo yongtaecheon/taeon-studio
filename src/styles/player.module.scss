@@ -1,17 +1,18 @@
 @import './animations.scss';
 
+
 .player{
   animation: slideUp 0.8s ease forwards;
   position: fixed;
   margin: 0 auto;
   left: 0;
   right: 0;
-  bottom: 3vh;
+  bottom: 4vh;
   background-color: #f0f0f0;
   color:#121318;
   border: 1px solid #ccc;
   width:85vw;
-  height:clamp(3vh, 4vw, 5vh);
+  height:5.5vh;
   border-radius:25px;
   display:flex;
   justify-content: space-between;
@@ -20,7 +21,7 @@
 }
 
 .title{
-  font-size:0.8em;
+  font-size:0.9em;
   margin-right:4vw;
   font-weight:600;
   white-space: nowrap;
@@ -29,11 +30,15 @@
 }
 
 .timeline{
+  font-weight:600;
   align-items: center;
   display:flex;
   &_progress {
     margin: 0px 1vw 0px 1vw;
     width: 48vw;
+    @media (max-width: 800px) {
+      width: 25vw;
+    }
   }
   margin-left:1vw;
   margin-right:1vw;
@@ -41,34 +46,39 @@
 
 .buttons{
   all: unset;
-  font-size: clamp(10px, 3vw, 30px);
+  font-size: 2em;
   margin-right:0.5vw;
   &_first{
     @extend .buttons;
     margin-left:4vw;
   }
-  &_container1{
-    position:relative;
-    display:flex;
-  }
-  &_container2 {
-    position: relative;
-    display: flex;
+  &_container{
+    &_play, &_volume, &_panning{
+      position: relative;
+      display: flex;
+    }
   }
 }
 
 .popover {
-  height:3vw;
+  white-space: nowrap;
+  font-weight:600;
   text-align: center;
   z-index:999;
   position: absolute;
-  top: -160%;
-  left: -100%;
+  top: -5vh;
+  left: -4vw;
   padding: 10px;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  &_range{
+    width:7vw;
+    @media (max-width: 800px) {
+      width: 15vw;
+    }
+  }
 }
 
 input[type=range]:focus {

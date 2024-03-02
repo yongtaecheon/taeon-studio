@@ -1,10 +1,15 @@
+.lab{
+  text-align: center;
+}
 .effects{
   display:flex;
   justify-content:center;
-  align-items:center;
+  // align-items:center;
 }
 
 .comp{
+  // display:grid;
+  // grid-template-columns: repeat(2, 1fr);
   background-color: rgba(15, 6, 6, 0.495);
   text-align:center;
   margin-right:10%;

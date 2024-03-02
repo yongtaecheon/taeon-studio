@@ -2,7 +2,6 @@
 import React from "react";
 import {Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/header';
-import Footer from './components/footer';
 import Player from './components/player';
 import { PlayerProvider } from "./contexts/playerContext";
 import { MusicProvider } from "./contexts/musicContext";
@@ -28,7 +27,6 @@ export default function App() {
             <Player />
           </MusicProvider>
         </PlayerProvider>
-      {pathname !== '/' && <Footer />}
     </div>
   )
 }

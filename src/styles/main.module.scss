@@ -1,6 +1,7 @@
 @import './animations.scss';
 
 .main{
+  position:relative;
   color:#f0f0f0;
   background-image: 
     linear-gradient(
@@ -12,38 +13,45 @@
   background-repeat: no-repeat;
   background-position:center;
   background-size: cover;
-  display: flex;
-  // flex-wrap:wrap;
+  display:flex;
   justify-content: center;
-  align-items: center;
 }
 
 .overlay {
+  position:absolute;
   display:flex;
-  justify-content:right;
-  align-items:center;
+  justify-content:center;
   width: 100vw;
-  height: 100vh;
-  background: linear-gradient(to right, transparent,#1c359b59, #040230aa);
+  height: 20vh;
+  background: linear-gradient(to top, transparent,#1c359b5e, #040230);
 }
 
 .nav{
+  z-index: 1;
+  margin-top:3vh;
   animation: slideInRight 0.8s ease forwards;
-  text-align:right;
-  margin-right:5vw;
-  cursor: pointer;
+  &_items{
+    font-size: 2em;
+    font-weight:600;
+    cursor: pointer;
+    margin:0px 2vw 0px 2vw;
+  }
+}
+
+.textbox{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  animation: slideUp 0.8s ease forwards;
+  text-align: center;
 }
 
 .texts{
-  width:60vw;
-  margin-left:10vw;
-  animation: slideUp 0.8s ease forwards;
-  text-align: center;
+  margin-left: 3vw;
+  margin-right: 3vw;
   &_h1 {
-    @extend .texts;
-    font-size: 7em;
-    line-height:1;
-    margin-left:0;
-    margin-bottom:0;
+    font-size: 10em;
+    line-height: 1;
+    margin:0;
   }
 }
