@@ -2,7 +2,10 @@
   display:flex;
   justify-content: space-between;
   .active {
-      color: #121318;
+      // color: #121318;
+      text-decoration: underline;
+      text-underline-offset: 10px;
+      filter: brightness(0%)
     }
 }
 .ul {
@@ -16,15 +19,22 @@
   margin-bottom:12px;
   margin-left:24px;
   font-size: 2.5em;
+  @media(max-width:450px){
+    font-size:1.5em;
+  }
   white-space: nowrap;
 }
 .li {
   margin-right: 1.5vw;
   list-style: none;
   &_link {
+    transition: filter 1s ease;
     font-weight:500;
     color: #626262;
     font-size: 1.5em;
+    @media(max-width:450px) {
+        font-size: 1.3em;
+      }
   }
 }
 

@@ -1,3 +1,5 @@
+@import './animations.scss';
+
 .about{
   text-align: center;
   line-height: 1;
@@ -7,6 +9,7 @@
 }
 
 .img{
+  animation: fadeIn .8s ease, blurIn .5s ease;
   width:90vw;
 }
 

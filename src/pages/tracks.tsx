@@ -6,7 +6,7 @@ export default function Tracks() {
   return (
     <div className={styles.tracks}>
       <h1>Tracks</h1>
-      <p>Select songs to listen!</p>
+      <span>Select songs to listen!</span>
       <LoadTracklist/>
     </div>
   )

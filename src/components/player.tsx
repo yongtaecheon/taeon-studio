@@ -1,5 +1,6 @@
 import React from "react";
 import { useRef, useEffect, useState, useContext } from 'react';
+import useDidMountEffect from '../hooks/useDidMountEffect';
 import styles from '../styles/player.module.scss'
 import { MusicContext } from '../contexts/musicContext';
 import { PlayerContext } from '../contexts/playerContext';
@@ -12,10 +13,13 @@ export default function Player() {
   const [totalDuration, setTotalDuration] = useState(0);
   const [isVolumeHovered, setIsVolumeHovered] = useState(false);
   const [isPanningHovered, setIsPanningHovered] = useState(false);
+  const [isSkip, setIsSkip] = useState(false);
 
-
-  const selectedMusic = useContext<any>(MusicContext).selectedMusic;
   const playerCtx = useContext<any>(PlayerContext);
+  const MusicCtx = useContext<any>(MusicContext);
+
+  const selectedMusic = MusicCtx.selectedMusic;
+  const changeMusic = MusicCtx.changeMusic;
 
   const [volume, setVolume] = [playerCtx.volume, playerCtx.setVolume];
   const [panning, setPanning] = [playerCtx.panning, playerCtx.setPanning];
@@ -108,9 +112,7 @@ export default function Player() {
     }
   }, [volume, panning, comp, reverb]);
 
-  useEffect(() => {
-    setPlaying(false);
-    setCurrentTime(0);
+  useEffect(() => { //새 오디오 렌더링시 totalDuration 로드가 발생하지 않아 추가로 작업
     const audioElement = audioRef.current;
     if (audioElement) {
       // canplay 이벤트가 발생하면 duration 값을 설정
@@ -127,7 +129,20 @@ export default function Player() {
     }
   }, [selectedMusic])
 
-  useEffect(() => {
+  useDidMountEffect(() => { //if skip to next song then autoplay
+    setPlaying(true);
+    setCurrentTime(0);
+    const audioElement = audioRef.current;
+    audioElement.play();
+    console.log('usedidmounteffect called by Skip');
+  }, [isSkip])
+
+  useDidMountEffect(() => { //tracks 에서 곡 선택시 자동 재생 시작
+    const audioElement = audioRef.current;
+    audioElement.play();
+  },[selectedMusic])
+
+  useEffect(() => { //change currentTime of audioElement
     const audioElement = audioRef.current;
     if (audioElement) {
       // 오디오의 전체 재생 시간
@@ -161,6 +176,32 @@ export default function Player() {
     }
   }
 
+  const handlePrevNext = (e: any) => {
+    const audioElement = audioRef.current;
+    const val = e.currentTarget.value;
+    if (val === 'next') {
+      changeMusic(val);
+    }
+    else if (val === 'prev') {
+      if (audioElement.currentTime !== 0) {
+        console.log(audioElement.currentTime);
+        if (audioElement.currentTime < 1) { //1초 되기 전에 눌렀을 경우 이전곡으로 이동
+          changeMusic(val);
+        }
+        else {//0초부터 재생
+          audioElement.currentTime = 0;
+          setCurrentTime(0);
+          audioElement.play();
+        }
+      }
+      else{
+        changeMusic(val);
+      }
+    }
+    console.log(val);
+    setIsSkip(!isSkip);
+  }
+
   const handleTime = (e: any) => {
     const newTime = parseFloat(e.currentTarget.value);
     const audioElement = audioRef.current;
@@ -190,24 +231,26 @@ export default function Player() {
     if (panning !== 0)
       setPanning(0);
   }
-  const handleMouseOut = (e:any) => {
+  const handleMouseOut = (e: any) => {
     if (popoverRef.current && popoverRef.current.contains(e.relatedTarget)) {
       // 마우스가 popover 안으로 들어온 경우는 무시
       return;
     }
     setIsVolumeHovered(false);
     setIsPanningHovered(false);
-  };
+  }
 
   return (
     <div className={styles.player}>
       <audio ref={audioRef} src={selectedMusic.music} />
-      <div className={styles.buttons_container_volume}>
-        <button className={styles.buttons_first} ref={playPauseRef} onClick={handlePlayPause}>
+      <div className={styles.buttons_container_play}>
+        <button className={styles.buttons_first} value='prev' onClick={handlePrevNext}><i className="bi bi-skip-start-fill"></i></button>
+        <button className={styles.buttons} ref={playPauseRef} onClick={handlePlayPause}>
           {isPlaying === true ?
-            <i className={`bi bi-pause-fill`}></i> :
-            <i className={`bi bi-play-fill`}></i>}
+            <i className='bi bi-pause-fill'></i> :
+            <i className='bi bi-play-fill'></i>}
         </button>
+        <button className={styles.buttons} value='next' onClick={handlePrevNext}><i className="bi bi-skip-end-fill"></i></button>
       </div>
       <div className={styles.timeline}>
         <span>{formatTime(currentTime)}</span>
