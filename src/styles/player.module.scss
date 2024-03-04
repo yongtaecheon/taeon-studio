@@ -62,23 +62,38 @@
 }
 
 .popover {
+  transform:rotate(270deg);
   white-space: nowrap;
   font-weight:600;
   text-align: center;
   z-index:999;
-  position: absolute;
-  top: -5vh;
-  left: -4vw;
+  position:absolute;
+  bottom: 6.9vw;
+  left: -4.5vw;
+  @media (max-width: 1000px) {
+    bottom: clamp(70.5px,8vw,8vw);
+    left:-5vw;
+  }
+  @media (max-width: 800px) {
+    bottom: clamp(76.4px, 10vw,10vw);
+    left:-6vw;
+  }
+  @media (max-width: 600px) {
+    left:-8vw;
+  }
+  @media (max-width: 460px) {
+    left:-11.5vw;
+  }
+  @media (max-width: 360px) {
+    left:-14.5vw;
+  }
   padding: 10px;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   &_range{
-    width:7vw;
-    @media (max-width: 800px) {
-      width: 15vw;
-    }
+    width:clamp(92px, 9vw,9vw);
   }
 }
 

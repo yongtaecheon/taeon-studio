@@ -5,7 +5,9 @@ import styles from "../styles/lab.module.scss";
 
 export default function LoadEffects() {
   const playerCtx = useContext<any>(PlayerContext);
+  const eqFreqs = [25, 75, 100, 250, 750, 2500, 7500, 20000];
   const [comp, setComp] = [playerCtx.comp, playerCtx.setComp];
+  const [eq, setEq] = [playerCtx.eq, playerCtx.setEq];
   const [reverb, setReverb] = [playerCtx.reverb, playerCtx.setReverb];
   return (
     <div className={styles.effects}>
@@ -30,6 +32,20 @@ export default function LoadEffects() {
         <p>output Gain - you can use it as Distortion</p>
         <span>{Math.floor(comp.outputGain*100)}</span>
         <input type="range" id="knee" min="0" max="2" value={comp.outputGain} step="0.01" onChange={(e: any) => setComp({ ...comp, outputGain: parseFloat(e.currentTarget.value) })} />
+      </div>
+      <div className={styles.comp}>
+        <h1>Equalizer</h1>
+        {eq.map((q: any, idx: number) => {
+          return <>
+            <span>{eqFreqs[idx]}</span>
+            <input type="range" id={q.type} min="-1" max="1" value={q.gain} step="0.01" onChange={
+              (e: any) =>
+              setEq(Object.values({
+                ...eq,
+                [idx]: { gain: parseFloat(e.currentTarget.value), type: q.type }
+              }))} />
+          </>
+        })}
       </div>
       <div className={styles.reverb}>
         <h1>Reverb</h1>

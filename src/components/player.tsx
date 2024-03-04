@@ -23,15 +23,15 @@ export default function Player() {
 
   const [volume, setVolume] = [playerCtx.volume, playerCtx.setVolume];
   const [panning, setPanning] = [playerCtx.panning, playerCtx.setPanning];
-  const [comp, reverb] = [playerCtx.comp, playerCtx.reverb];
-
+  const [comp, reverb, eq] = [playerCtx.comp, playerCtx.reverb, playerCtx.eq];
+  
   const audioRef = useRef<any>(null);
   const playPauseRef = useRef<any>(null);
   const popoverRef = useRef<any>(null);
   useEffect(() => {
-    const audioElement = audioRef.current;
-
-    function generateIR (time:number, decay:number) {
+    const audioElement = audioRef.current;  
+    const eqFreqs = [25, 75, 100, 250, 750, 2500, 7500, 20000]; //8-band EQ
+    function generateIR (time:number, decay:number) {//reverb IR 생성
       const sampleRate = audioContext.sampleRate;
       const length = sampleRate * time;
       const impulse = audioContext.createBuffer(2, length, sampleRate);
@@ -60,6 +60,15 @@ export default function Player() {
         audioElement.compressorNode = audioContext.createDynamicsCompressor();
         //outputGain (distortion)
         audioElement.outputGainNode = audioContext.createGain();
+        //EQ
+        const eqNodes = eqFreqs.map((freq, idx) => {
+          const eqNode = audioContext.createBiquadFilter();
+          eqNode.gain.value = eq[idx].gain;
+          eqNode.frequency.setValueAtTime(freq, audioContext.currentTime);
+          eqNode.type = eq[idx].type;
+          return eqNode;
+        });
+
         //reverb
         audioElement.dryNode = audioContext.createGain();
         audioElement.reverbNode = audioContext.createConvolver();
@@ -75,13 +84,17 @@ export default function Player() {
           .connect(audioElement.volumeNode) //input gain
           .connect(audioElement.compressorNode) //comp
           .connect(audioElement.outputGainNode) //comp output gain
-          
+        audioElement.filterNode = eqNodes.reduce((prev, cur) => {
+          prev.connect(cur);
+          return cur;
+        }, audioElement.dynamicNode); //dynamic -> Filter(EQ)
+        // audioElement.filterNode = audioElement.eqNodes[eqNodes.length - 1]; //마지막 eq노드 참조
         //dry
-        audioElement.dynamicNode //input
+        audioElement.filterNode //input
           .connect(audioElement.dryNode) //conect dynmaic source(dry)
           .connect(audioElement.reverbOutputNode) 
         //wet
-        audioElement.dynamicNode //input
+        audioElement.filterNode //input
           .connect(audioElement.reverbNode)//connect reverb wet source
           .connect(audioElement.wetNode) 
           .connect(audioElement.reverbOutputNode)
@@ -109,8 +122,10 @@ export default function Player() {
       console.log(`pan set to ${audioElement.pannerNode.pan.value}`);
       console.log(`comp threshold set to ${audioElement.compressorNode.threshold.value}`);
       console.log(`wet signal set to ${audioElement.wetNode.gain.value}`);
+      console.log(`eq signal gain set to ${audioElement.filterNode.gain.value}`)
+      console.log(eq);
     }
-  }, [volume, panning, comp, reverb]);
+  }, [volume, panning, comp, reverb, eq]);
 
   useEffect(() => { //새 오디오 렌더링시 totalDuration 로드가 발생하지 않아 추가로 작업
     const audioElement = audioRef.current;
@@ -266,7 +281,8 @@ export default function Player() {
               : <i className="bi bi-volume-down-fill"></i>)}
         </button>
         {isVolumeHovered && <div ref={popoverRef} className={styles.popover}>
-          <span>Volume: {Math.floor(volume * 100)}</span>   <input className={styles.popover_range} type="range" id="volume" min="0" max="1" value={volume} step="0.01" onChange={handleVolume} />
+          {/* <span>Volume: {Math.floor(volume * 100)}</span> */}
+          <input className={styles.popover_range} type="range" id="volume" min="0" max="1" value={volume} step="0.01" onChange={handleVolume} />
         </div>}
       </div>
 
@@ -277,7 +293,8 @@ export default function Player() {
               : < i className="bi bi-arrow-left-short"></i>)}
         </button>
         {isPanningHovered && <div ref={popoverRef} className={styles.popover}>
-          <span>Panning: {Math.floor(panning * 64)}</span> <input className={styles.popover_range} type="range" id="panner" min="-1" max="1" value={panning} step="0.01" onChange={handlePanning} />
+          {/* <span>Panning: {Math.floor(panning * 64)}</span> */}
+          <input className={styles.popover_range} type="range" id="panner" min="-1" max="1" value={panning} step="0.01" onChange={handlePanning} />
         </div>}
       </div>
       <span className={styles.title}>{selectedMusic.title}</span>

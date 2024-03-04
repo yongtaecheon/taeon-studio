@@ -26,6 +26,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
   const [musicIdx, setMusicIdx] = useState({ artist: 'taeon', idx:3});
   const [selectedMusic, setSelectedMusic] = useState(tracklist.taeon[musicIdx.idx]);
   const changeMusic = (state: string) => {
+    console.log(`changeMusic called by ${state}`)
     let copy = {...musicIdx};
     if (state === 'prev') {
       if (musicIdx.idx === 0) { //first song then move to last song
