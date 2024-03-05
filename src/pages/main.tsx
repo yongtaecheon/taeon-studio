@@ -12,7 +12,7 @@ export default function Main() {
         <div className={styles.nav}>
           <span className={styles.nav_items} onClick={() => navigate('/about')}>About</span>
           <span className={styles.nav_items} onClick={() => navigate('/tracks')}>Tracks</span>
-          <span className={styles.nav_items} onClick={() => navigate('/about')}>Lab</span>
+          <span className={styles.nav_items} onClick={() => navigate('/lab')}>Lab</span>
         </div>
       </div>
       <div className={styles.textbox}>

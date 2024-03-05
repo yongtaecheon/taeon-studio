@@ -18,3 +18,17 @@
   background-color: rgba(15, 6, 6, 0.495);
   text-align: center;
 }
+
+input[type=range].input-knob,
+input[type=range].input-slider {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: 0px 0%;
+  background-color: transparent;
+  touch-action: none;
+}

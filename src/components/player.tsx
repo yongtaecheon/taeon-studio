@@ -75,7 +75,6 @@ export default function Player() {
           audioElement.eq4Node, audioElement.eq5Node,
           audioElement.eq6Node, audioElement.eq7Node
         ]
-
         //reverb
         audioElement.dryNode = audioContext.createGain();
         audioElement.reverbNode = audioContext.createConvolver();
@@ -135,7 +134,7 @@ export default function Player() {
       audioElement.wetNode.gain.value = reverb.mix;
       //pan
       audioElement.pannerNode.pan.value = panning;
-      
+
       // console.log(`volume set to ${audioElement.volumeNode.gain.value}`);
       // console.log(`pan set to ${audioElement.pannerNode.pan.value}`);
       // console.log(`comp threshold set to ${audioElement.compressorNode.threshold.value}`);
@@ -165,7 +164,7 @@ export default function Player() {
     setCurrentTime(0);
     const audioElement = audioRef.current;
     audioElement.play();
-    console.log('usedidmounteffect called by Skip');
+    console.log('useDidMountEffect called by Skip');
   }, [isSkip])
 
   useDidMountEffect(() => { //tracks 에서 곡 선택시 자동 재생 시작
@@ -215,7 +214,6 @@ export default function Player() {
     }
     else if (val === 'prev') {
       if (audioElement.currentTime !== 0) {
-        console.log(audioElement.currentTime);
         if (audioElement.currentTime < 1) { //1초 되기 전에 눌렀을 경우 이전곡으로 이동
           changeMusic(val);
         }
@@ -229,7 +227,7 @@ export default function Player() {
         changeMusic(val);
       }
     }
-    console.log(val);
+    console.log(`Select ${val} song`);
     setIsSkip(!isSkip);
   }
 

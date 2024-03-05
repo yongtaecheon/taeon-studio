@@ -37,12 +37,19 @@ export default function LoadEffects() {
         {eq.map((q: any, idx: number) => {
           return <>
             <span>{q.freq}</span>
-            <input type="range" id={q.type} min="-20" max="20" value={q.gain} step="0.1" onChange={
+            <input type="range" id={q.type} min="-10" max="10" value={q.gain} step="0.1" onChange={
               (e: any) =>
               setEq(Object.values({
                 ...eq,
                 [idx]: { gain: parseFloat(e.currentTarget.value), type: q.type, freq:q.freq }
               }))} />
+            <button onClick={
+              () =>
+              setEq(Object.values({
+                ...eq,
+                [idx]: { gain: 0, type: q.type, freq:q.freq }
+              }))}>Default</button>
+            <br/>
           </>
         })}
       </div>
