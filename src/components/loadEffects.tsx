@@ -5,7 +5,6 @@ import styles from "../styles/lab.module.scss";
 
 export default function LoadEffects() {
   const playerCtx = useContext<any>(PlayerContext);
-  const eqFreqs = [25, 75, 100, 250, 750, 2500, 7500, 20000];
   const [comp, setComp] = [playerCtx.comp, playerCtx.setComp];
   const [eq, setEq] = [playerCtx.eq, playerCtx.setEq];
   const [reverb, setReverb] = [playerCtx.reverb, playerCtx.setReverb];
@@ -37,12 +36,12 @@ export default function LoadEffects() {
         <h1>Equalizer</h1>
         {eq.map((q: any, idx: number) => {
           return <>
-            <span>{eqFreqs[idx]}</span>
-            <input type="range" id={q.type} min="-1" max="1" value={q.gain} step="0.01" onChange={
+            <span>{q.freq}</span>
+            <input type="range" id={q.type} min="-20" max="20" value={q.gain} step="0.1" onChange={
               (e: any) =>
               setEq(Object.values({
                 ...eq,
-                [idx]: { gain: parseFloat(e.currentTarget.value), type: q.type }
+                [idx]: { gain: parseFloat(e.currentTarget.value), type: q.type, freq:q.freq }
               }))} />
           </>
         })}

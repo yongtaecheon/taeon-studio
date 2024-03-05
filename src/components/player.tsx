@@ -29,9 +29,8 @@ export default function Player() {
   const playPauseRef = useRef<any>(null);
   const popoverRef = useRef<any>(null);
   useEffect(() => {
-    const audioElement = audioRef.current;  
-    const eqFreqs = [25, 75, 100, 250, 750, 2500, 7500, 20000]; //8-band EQ
-    function generateIR (time:number, decay:number) {//reverb IR 생성
+    const audioElement = audioRef.current;
+    function generateIR(time: number, decay: number) {//reverb IR 생성
       const sampleRate = audioContext.sampleRate;
       const length = sampleRate * time;
       const impulse = audioContext.createBuffer(2, length, sampleRate);
@@ -48,6 +47,7 @@ export default function Player() {
     }
 
     if (audioElement) {
+      let eqNodes:any = []
       if (!audioElement.sourceNode) {
         console.log('set default mediaElementSource')
         //Media Element Source 생성
@@ -61,13 +61,20 @@ export default function Player() {
         //outputGain (distortion)
         audioElement.outputGainNode = audioContext.createGain();
         //EQ
-        const eqNodes = eqFreqs.map((freq, idx) => {
-          const eqNode = audioContext.createBiquadFilter();
-          eqNode.gain.value = eq[idx].gain;
-          eqNode.frequency.setValueAtTime(freq, audioContext.currentTime);
-          eqNode.type = eq[idx].type;
-          return eqNode;
-        });
+        audioElement.eq0Node = audioContext.createBiquadFilter();
+        audioElement.eq1Node = audioContext.createBiquadFilter();
+        audioElement.eq2Node = audioContext.createBiquadFilter();
+        audioElement.eq3Node = audioContext.createBiquadFilter();
+        audioElement.eq4Node = audioContext.createBiquadFilter();
+        audioElement.eq5Node = audioContext.createBiquadFilter();
+        audioElement.eq6Node = audioContext.createBiquadFilter();
+        audioElement.eq7Node = audioContext.createBiquadFilter();
+        eqNodes = [
+          audioElement.eq0Node, audioElement.eq1Node,
+          audioElement.eq2Node, audioElement.eq3Node,
+          audioElement.eq4Node, audioElement.eq5Node,
+          audioElement.eq6Node, audioElement.eq7Node
+        ]
 
         //reverb
         audioElement.dryNode = audioContext.createGain();
@@ -81,22 +88,20 @@ export default function Player() {
         //최종연결
         audioElement.dynamicNode =
           source
-          .connect(audioElement.volumeNode) //input gain
-          .connect(audioElement.compressorNode) //comp
-          .connect(audioElement.outputGainNode) //comp output gain
-        audioElement.filterNode = eqNodes.reduce((prev, cur) => {
-          prev.connect(cur);
-          return cur;
-        }, audioElement.dynamicNode); //dynamic -> Filter(EQ)
-        // audioElement.filterNode = audioElement.eqNodes[eqNodes.length - 1]; //마지막 eq노드 참조
+            .connect(audioElement.volumeNode) //input gain
+            .connect(audioElement.compressorNode) //comp
+            .connect(audioElement.outputGainNode) //comp output gain
+        audioElement.filterNode = eqNodes.reduce((prev: any, cur: any) => {
+          return prev.connect(cur);
+        }, audioElement.dynamicNode)
         //dry
         audioElement.filterNode //input
           .connect(audioElement.dryNode) //conect dynmaic source(dry)
-          .connect(audioElement.reverbOutputNode) 
+          .connect(audioElement.reverbOutputNode)
         //wet
         audioElement.filterNode //input
           .connect(audioElement.reverbNode)//connect reverb wet source
-          .connect(audioElement.wetNode) 
+          .connect(audioElement.wetNode)
           .connect(audioElement.reverbOutputNode)
         audioElement.reverbOutputNode
           .connect(audioElement.pannerNode) //pan
@@ -111,19 +116,30 @@ export default function Player() {
       audioElement.compressorNode.release.value = comp.release;
       audioElement.compressorNode.knee.value = comp.knee;
       audioElement.outputGainNode.gain.value = comp.outputGain;
+      //eq
+      eqNodes = [
+        audioElement.eq0Node, audioElement.eq1Node,
+        audioElement.eq2Node, audioElement.eq3Node,
+        audioElement.eq4Node, audioElement.eq5Node,
+        audioElement.eq6Node, audioElement.eq7Node
+      ]
+      eq.forEach((q: any, idx: number) => {
+        eqNodes[idx].gain.value = q.gain;
+        eqNodes[idx].frequency.value = q.freq;
+        eqNodes[idx].type = q.type;
+        // console.log(`eq ${idx} signal gain set to ${eqNodes[idx].gain.value}`);
+      });
       //reverb
       audioElement.dryNode.gain.value = 1 - reverb.mix;
       audioElement.reverbNode.buffer = generateIR(reverb.time, reverb.decay);
       audioElement.wetNode.gain.value = reverb.mix;
       //pan
       audioElement.pannerNode.pan.value = panning;
-
-      console.log(`volume set to ${audioElement.volumeNode.gain.value}`);
-      console.log(`pan set to ${audioElement.pannerNode.pan.value}`);
-      console.log(`comp threshold set to ${audioElement.compressorNode.threshold.value}`);
-      console.log(`wet signal set to ${audioElement.wetNode.gain.value}`);
-      console.log(`eq signal gain set to ${audioElement.filterNode.gain.value}`)
-      console.log(eq);
+      
+      // console.log(`volume set to ${audioElement.volumeNode.gain.value}`);
+      // console.log(`pan set to ${audioElement.pannerNode.pan.value}`);
+      // console.log(`comp threshold set to ${audioElement.compressorNode.threshold.value}`);
+      // console.log(`wet signal set to ${audioElement.wetNode.gain.value}`);
     }
   }, [volume, panning, comp, reverb, eq]);
 

@@ -1,4 +1,4 @@
-import { useState, createContext, useMemo } from "react";
+import { useState, createContext } from "react";
 
 export interface Comp{
   threshold: number, //-100~0
@@ -13,6 +13,7 @@ export interface Comp{
 export interface EQ{
   gain: number,
   type: string, //lowshelf, highshelf, peaking
+  freq: number,
 }
 
 export interface Reverb{
@@ -37,14 +38,15 @@ export interface PlayerContextType{
 export const PlayerContext = createContext<PlayerContextType|null>(null);
 
 export function PlayerProvider({ children }: { children: React.ReactNode }) {
+  const eqFreqs = [60, 250, 700, 1500, 2500, 4000, 7500, 15000]; //8-band EQ
   let eqObj:EQ[] = [];
   for (let i = 0; i < 8; i++){
     if (i === 0)
-      eqObj.push({ gain: 0, type: 'lowshelf' });
+      eqObj.push({ gain: 0, type: 'lowshelf', freq: eqFreqs[i] });
     else if (i === 7)
-      eqObj.push({ gain: 0, type: 'highshelf' });
+      eqObj.push({ gain: 0, type: 'highshelf', freq: eqFreqs[i] });
     else
-      eqObj.push({ gain: 0, type: 'peaking' });
+      eqObj.push({ gain: 0, type: 'peaking', freq: eqFreqs[i] });
   }
   const [volume, setVolume] = useState(1);
   const [eq, setEq] = useState<EQ[]>(eqObj);
