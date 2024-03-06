@@ -36,12 +36,14 @@ const Knob = () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging]);
 
   return (
     <div>
-      <label htmlFor="knob">Knob</label>
+      {/* <label htmlFor="knob">Knob</label> */}
       <input
+        className={styles.knob_range}
         type="range"
         id="knob"
         name="knob"
@@ -59,9 +61,11 @@ const Knob = () => {
           transform: `rotate(${knobValue * 3.6}deg)`
         }}
       >
-        <div className={styles.knob}></div>
+        <div className={styles.knob}>
+          <div className={styles.knob_line}>&nbsp;</div>
+        </div>
       </div>
-      <p>Current Value: {knobValue}</p>
+      <p>Current Value: {Math.floor(knobValue)}</p>
     </div>
   );
 };

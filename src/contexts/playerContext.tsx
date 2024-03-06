@@ -17,9 +17,9 @@ export interface EQ{
 }
 
 export interface Reverb{
+  mix: number, //0~1
   time: number, //0~1
   decay: number, //0~1
-  mix: number, //0~1
 }
 
 export interface PlayerContextType{
@@ -34,11 +34,13 @@ export interface PlayerContextType{
   panning: number,
   setPanning: (value: number) => void,
 }
+export const eqFreqs = [60, 250, 700, 1500, 2500, 4000, 7500, 15000]; //8-band EQ
+export const defaultComp:Comp = { threshold: 0, ratio: 1, attack: 0, release: 0, knee: 0, outputGain: 1 }
+export const defaultReverb: Reverb = { mix: 0, time: 0.01, decay: 0.01 };
 
-export const PlayerContext = createContext<PlayerContextType|null>(null);
+export const PlayerContext = createContext<PlayerContextType | null>(null);
 
 export function PlayerProvider({ children }: { children: React.ReactNode }) {
-  const eqFreqs = [60, 250, 700, 1500, 2500, 4000, 7500, 15000]; //8-band EQ
   let eqObj:EQ[] = [];
   for (let i = 0; i < 8; i++){
     if (i === 0)
@@ -50,8 +52,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   }
   const [volume, setVolume] = useState(1);
   const [eq, setEq] = useState<EQ[]>(eqObj);
-  const [comp, setComp] = useState<Comp>({ threshold: 0, ratio: 1, attack: 0, release: 0, knee: 0, outputGain: 1 })
-  const [reverb, setReverb] = useState<Reverb>({ time: 0.01, decay: 0.01, mix: 0 });
+  const [comp, setComp] = useState<Comp>(defaultComp);
+  const [reverb, setReverb] = useState<Reverb>(defaultReverb);
   const [panning, setPanning] = useState(0);
   
   return (

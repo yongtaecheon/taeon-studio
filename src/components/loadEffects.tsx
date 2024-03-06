@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext } from "react"
-import { PlayerContext } from "../contexts/playerContext";
+import { PlayerContext, defaultComp, defaultReverb } from "../contexts/playerContext";
 import styles from "../styles/lab.module.scss";
 
 export default function LoadEffects() {
@@ -8,62 +8,101 @@ export default function LoadEffects() {
   const [comp, setComp] = [playerCtx.comp, playerCtx.setComp];
   const [eq, setEq] = [playerCtx.eq, playerCtx.setEq];
   const [reverb, setReverb] = [playerCtx.reverb, playerCtx.setReverb];
+
+  const renderComp = () => {
+    let arr = [];
+    const params:any = {
+      threshold: ['-100', '0', '1'], ratio: ['1', '20', '1'],
+      attack: ['0', '1', '0.01'], release: ['0', '1', '0.01'],
+      knee: ['0', '40', '1'], outputGain: ['0', '2', '0.01']
+    };
+    let key: string;
+    for (key in comp) {
+      arr.push(
+        <div>
+          <p>{key}</p>
+          <p>{key === 'outputGain' ? `${Math.floor(comp[key] * 100)} %` :
+            (key === 'attack' || key === 'release') ? `${comp[key]} ms` :
+              key === 'ratio' ? `${comp[key]} : 1` :
+            key === 'threshold'? `${comp[key]} dB`:comp[key]}</p>
+          <input className={styles.params} type="range"
+            id={key}
+            min={params[key][0]}
+            max={params[key][1]}
+            value={comp[key]}
+            step={params[key][2]}
+            onChange={(key => (e: any) => setComp({ ...comp, [key]: parseFloat(e.currentTarget.value) }))(key)} />
+        </div>
+      );
+    }
+    arr.push(<button onClick={()=>setComp(defaultComp)}>Default</button>)
+    return arr;
+  }
+  const renderEq = () => {
+    let arr = eq.map((q: any, idx: number) => {
+      return <div>
+        <p>{q.freq} Hz</p>
+        <input className={styles.params} type="range" id={q.type} min="-10" max="10" value={q.gain} step="0.1" onChange={
+          (e: any) =>
+          setEq(Object.values({
+            ...eq,
+            [idx]: { gain: parseFloat(e.currentTarget.value), type: q.type, freq:q.freq }
+          }))} />
+        <button onClick={
+          () =>
+          setEq(Object.values({
+            ...eq,
+            [idx]: { gain: 0, type: q.type, freq:q.freq }
+          }))}>Default</button>
+        <br/>
+      </div>
+    })
+    return arr;
+  }
+  const renderReverb = () => {
+    let arr = [];
+    let key: string;
+    const params:any = {mix: ['0','1','0.01'], time: ['0.01','1','0.01'], decay: ['0.01','1','0.01']}
+    for (key in reverb) {
+      arr.push(
+        <div>  
+          <p>{key}</p>
+          <p>{Math.floor(reverb[key] * 100)} %</p>
+          <input type="range" className={styles.params}
+            id={key}
+            min={params[key][0]}
+            max={params[key][1]}
+            value={reverb[key]}
+            step={params[key][2]}
+            onChange={(key => (e: any) => setReverb({ ...reverb, [key]: parseFloat(e.currentTarget.value) }))(key)} />
+        </div>
+      );
+    }
+    arr.push(<button onClick={()=>setReverb(defaultReverb)}>Default</button>)
+    return arr;
+  }
   return (
     <div className={styles.effects}>
-      <div className={styles.comp}>
-        <h1>Compressor</h1>
-        <p>recommend you to turn down the volume.</p>
-        <p>threshold</p>
-        <span>{comp.threshold}</span>
-        <input type="range" id="threshold" min="-100" max="0" value={comp.threshold} step="1" onChange={(e: any) => setComp({ ...comp, threshold: parseInt(e.currentTarget.value) })} />
-        <p>ratio</p>
-        <span>{comp.ratio}</span>
-        <input type="range" id="ratio" min="1" max="20" value={comp.ratio} step="1" onChange={(e: any) => setComp({ ...comp, ratio: parseInt(e.currentTarget.value) })} />
-        <p>attack</p>
-        <span>{(comp.attack).toFixed(2)}</span>
-        <input type="range" id="attack" min="0" max="1" value={comp.attack} step="0.01" onChange={(e: any) => setComp({ ...comp, attack: parseFloat(e.currentTarget.value) })} />
-        <p>relase</p>
-        <span>{(comp.release).toFixed(2)}</span>
-        <input type="range" id="release" min="0" max="1" value={comp.release} step="0.01" onChange={(e: any) => setComp({ ...comp, release: parseFloat(e.currentTarget.value) })} />
-        <p>knee</p>
-        <span>{comp.knee}</span>
-        <input type="range" id="knee" min="0" max="40" value={comp.knee} step="1" onChange={(e: any) => setComp({ ...comp, knee: parseInt(e.currentTarget.value) })} />
-        <p>output Gain - you can use it as Distortion</p>
-        <span>{Math.floor(comp.outputGain*100)}</span>
-        <input type="range" id="knee" min="0" max="2" value={comp.outputGain} step="0.01" onChange={(e: any) => setComp({ ...comp, outputGain: parseFloat(e.currentTarget.value) })} />
-      </div>
-      <div className={styles.comp}>
-        <h1>Equalizer</h1>
-        {eq.map((q: any, idx: number) => {
-          return <>
-            <span>{q.freq}</span>
-            <input type="range" id={q.type} min="-10" max="10" value={q.gain} step="0.1" onChange={
-              (e: any) =>
-              setEq(Object.values({
-                ...eq,
-                [idx]: { gain: parseFloat(e.currentTarget.value), type: q.type, freq:q.freq }
-              }))} />
-            <button onClick={
-              () =>
-              setEq(Object.values({
-                ...eq,
-                [idx]: { gain: 0, type: q.type, freq:q.freq }
-              }))}>Default</button>
-            <br/>
-          </>
-        })}
-      </div>
-      <div className={styles.reverb}>
-        <h1>Reverb</h1>
-        <p>mix</p>
-        <span>{Math.floor(reverb.mix * 100)}%</span>
-        <input type="range" id="threshold" min="0" max="1" value={reverb.mix} step="0.01" onChange={(e: any) => setReverb({ ...reverb, mix: parseFloat(e.currentTarget.value) })} />
-        <p>Reverb time</p>
-        <span>{Math.floor(reverb.time * 100)}%</span>
-        <input type="range" id="threshold" min="0.01" max="1" value={reverb.time} step="0.01" onChange={(e: any) => setReverb({ ...reverb, time: parseFloat(e.currentTarget.value) })} />
-        <p>Decay</p>
-        <span>{Math.floor(reverb.decay * 100)}%</span>
-        <input type="range" id="threshold" min="0.01" max="1" value={reverb.decay} step="0.01" onChange={(e: any) => setReverb({ ...reverb, decay: parseFloat(e.currentTarget.value) })} />
+      <div className={styles.effects_containers}>
+        <div className={styles.effects_container}>
+          <h1>Compressor</h1>
+          <p>recommend you to turn down the volume.</p>
+          <div className={styles.effects_container_adjust}>
+            {renderComp()}
+          </div>
+        </div>
+        <div className={styles.effects_container}>
+          <h1>Equalizer</h1>
+          <div className={styles.effects_container_adjust}>
+            {renderEq()}
+          </div>
+        </div>
+        <div className={styles.effects_container}>
+          <h1>Reverb</h1>
+          <div className={styles.effects_container_adjust}>
+            {renderReverb()}
+          </div>
+        </div>
       </div>
     </div>
   )
