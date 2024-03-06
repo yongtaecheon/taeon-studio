@@ -20,16 +20,16 @@ This is a music streaming, effecting studio for my covered/arranged musics.
   - Choose songs by selecting the artwork of the songs
 ### Lab
   - Can add Effects(Compressor, Equalizer and Reverb) to AudioContext in Player.tsx
-  1. Compressor
+  1. **Compressor**
     - Can adjust Threshold, Ratio, Attack, Release, Knee and Output Gain
-  2. Equalizer
+  2. **Equalizer**
     - 8-band Equalizer
     - 60, 250 Hz (low end - mid low)
     - 700, 1500 Hz (mid - mid high)
     - 2500, 4000, 7500, 15000 Hz (high - high end)
     - 60Hz and 15000Hz are Shelf filter (Lowshelf, Highshelf)
     - Other frequencies are Peaking filter
-  3. Reverb
+  3. **Reverb**
     - Based on Convolution Reverb (based on Impulse Response)
     - Can adjust Mix(between dry and wet signal), Time(length of Reverb) and Decay(Reverb decreasing time) 
   More Effects will be added.
