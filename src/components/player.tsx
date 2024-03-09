@@ -14,12 +14,13 @@ export default function Player() {
   const [isVolumeHovered, setIsVolumeHovered] = useState(false);
   const [isPanningHovered, setIsPanningHovered] = useState(false);
   const [isSkip, setIsSkip] = useState(false);
+  const [isHide, setIsHide] = useState(false);
 
   const playerCtx = useContext<any>(PlayerContext);
   const MusicCtx = useContext<any>(MusicContext);
 
-  const selectedMusic = MusicCtx.selectedMusic;
-  const changeMusic = MusicCtx.changeMusic;
+  const selectedMusic = MusicCtx.selectedMusic; //object
+  const changeMusic = MusicCtx.changeMusic; //function
 
   const [volume, setVolume] = [playerCtx.volume, playerCtx.setVolume];
   const [panning, setPanning] = [playerCtx.panning, playerCtx.setPanning];
@@ -47,7 +48,7 @@ export default function Player() {
     }
 
     if (audioElement) {
-      let eqNodes:any = []
+      let eqNodes: any = []
       if (!audioElement.sourceNode) {
         console.log('set default mediaElementSource')
         //Media Element Source 생성
@@ -170,7 +171,7 @@ export default function Player() {
   useDidMountEffect(() => { //tracks 에서 곡 선택시 자동 재생 시작
     const audioElement = audioRef.current;
     audioElement.play();
-  },[selectedMusic])
+  }, [selectedMusic])
 
   useEffect(() => { //change currentTime of audioElement
     const audioElement = audioRef.current;
@@ -223,7 +224,7 @@ export default function Player() {
           audioElement.play();
         }
       }
-      else{
+      else {
         changeMusic(val);
       }
     }
@@ -270,10 +271,11 @@ export default function Player() {
   }
 
   return (
-    <div className={styles.player}>
+    <div className={styles.player} >
       <audio ref={audioRef} src={selectedMusic.music} />
-      <div className={styles.buttons_container_play}>
-        <button className={styles.buttons_first} value='prev' onClick={handlePrevNext}><i className="bi bi-skip-start-fill"></i></button>
+      {/* play buttons */}
+      <div className={styles.buttons_container_play} >
+        <button className={styles.buttons} value='prev' onClick={handlePrevNext}><i className="bi bi-skip-start-fill"></i></button>
         <button className={styles.buttons} ref={playPauseRef} onClick={handlePlayPause}>
           {isPlaying === true ?
             <i className='bi bi-pause-fill'></i> :
@@ -281,26 +283,28 @@ export default function Player() {
         </button>
         <button className={styles.buttons} value='next' onClick={handlePrevNext}><i className="bi bi-skip-end-fill"></i></button>
       </div>
-      <div className={styles.timeline}>
+      {/* timeline */}
+      < div className={styles.timeline} >
         <span>{formatTime(currentTime)}</span>
         {!isNaN(totalDuration) && <input className={styles.timeline_progress} type="range" id="progress" min="0" max={totalDuration} value={currentTime} step="0.01" onChange={handleTime} />}
         <span>{!isNaN(totalDuration) && formatTime(totalDuration)}</span>
-      </div>
-
-      <div className={styles.buttons_container_volume} onMouseOut={handleMouseOut}>
+      </div >
+      {/* volume, panning */}
+      < div className={styles.buttons_container_volume} onMouseOut={handleMouseOut} >
         <button className={styles.buttons} onMouseOver={() => setIsVolumeHovered(true)} onClick={toggleVolume}>
           {volume === 1 ?
             <i className="bi bi-volume-up-fill"></i> :
             (volume === 0 ? <i className="bi bi-volume-mute-fill"></i>
               : <i className="bi bi-volume-down-fill"></i>)}
         </button>
-        {isVolumeHovered && <div ref={popoverRef} className={styles.popover}>
-          {/* <span>Volume: {Math.floor(volume * 100)}</span> */}
-          <input className={styles.popover_range} type="range" id="volume" min="0" max="1" value={volume} step="0.01" onChange={handleVolume} />
-        </div>}
-      </div>
-
-      <div className={`${styles.buttons_container_panning} panning`} onMouseOut={handleMouseOut}>
+        {
+          isVolumeHovered && <div ref={popoverRef} className={styles.popover}>
+            {/* <span>Volume: {Math.floor(volume * 100)}</span> */}
+            <input className={styles.popover_range} type="range" id="volume" min="0" max="1" value={volume} step="0.01" onChange={handleVolume} />
+          </div>
+        }
+      </div >
+      <div className={styles.buttons_container_panning} onMouseOut={handleMouseOut}>
         <button className={styles.buttons} onMouseOver={() => setIsPanningHovered(true)} onClick={togglePanning}>
           {panning === 0 ? < i className="bi bi-arrows"></i> :
             (panning > 0 ? < i className="bi bi-arrow-right-short"></i>
@@ -311,8 +315,9 @@ export default function Player() {
           <input className={styles.popover_range} type="range" id="panner" min="-1" max="1" value={panning} step="0.01" onChange={handlePanning} />
         </div>}
       </div>
+      {/* song info - title */}
       <span className={styles.title}>{selectedMusic.title}</span>
-    </div>
+    </div >
   )
 }
 

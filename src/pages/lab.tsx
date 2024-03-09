@@ -5,7 +5,10 @@ import styles from '../styles/lab.module.scss';
 export default function Lab() {
   return (
     <div className={styles.lab}>
-      <p>You can use Effects on my songs - <strong>THIS PAGE IS ON DEVELOPMENT!</strong></p>
+      <h1>Lab</h1>
+      <p>You can apply your custom effects on my songs.</p>
+      <p>Effect chain goes <strong>Original Music</strong> → <strong>Compressor</strong> → <strong>Equalizer</strong> → <strong>Reverb</strong></p>
+      <hr/>
       <LoadEffects />
     </div>
   )

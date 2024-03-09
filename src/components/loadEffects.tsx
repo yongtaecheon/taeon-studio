@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext } from "react"
-import { PlayerContext, defaultComp, defaultReverb } from "../contexts/playerContext";
+import { PlayerContext, defaultComp, defaultReverb, setDefaultEq } from "../contexts/playerContext";
 import styles from "../styles/lab.module.scss";
 
 export default function LoadEffects() {
@@ -19,7 +19,7 @@ export default function LoadEffects() {
     for (let key in comp) {
       arr.push(
         <div className={styles.params_container}>
-          <p>{key.charAt(0).toUpperCase()+key.slice(1)}</p>
+          <strong>{key.charAt(0).toUpperCase()+key.slice(1)}</strong>
           <p>{key === 'outputGain' ? `${Math.floor(comp[key] * 100)} %` :
             (key === 'attack' || key === 'release') ? `${comp[key]} ms` :
               key === 'ratio' ? `${comp[key]} : 1` :
@@ -31,30 +31,34 @@ export default function LoadEffects() {
             value={comp[key]}
             step={params[key][2]}
             onChange={(key => (e: any) => setComp({ ...comp, [key]: parseFloat(e.currentTarget.value) }))(key)} />
+          <p>{params[key][0]} {key === 'outputGain' ? ` %` :
+            (key === 'attack' || key === 'release') ? ` ms` :
+              key === 'ratio' ? ` : 1` :
+            key === 'threshold'? ` dB`:comp[key]}</p>
         </div>
       );
     }
-    arr.push(<button className={styles.params_button} onClick={()=>setComp(defaultComp)}>Default</button>)
     return arr;
   }
   const renderEq = () => {
     let arr = eq.map((q: any, idx: number) => {
       return (
         <div className={styles.params_container}>
-          <p>{q.freq} Hz</p>
+          <strong>{q.freq} Hz</strong>
+          <p>{q.gain} dB</p>
           <input className={styles.params} type="range" id={q.type} min="-10" max="10" value={q.gain} step="0.1" onChange={
             (e: any) =>
               setEq(Object.values({
                 ...eq,
                 [idx]: { gain: parseFloat(e.currentTarget.value), type: q.type, freq: q.freq }
               }))} />
-          <button className={styles.params_button} onClick={
+          {/* <button className={styles.params_button} onClick={
             () =>
               setEq(Object.values({
                 ...eq,
                 [idx]: { gain: 0, type: q.type, freq: q.freq }
-              }))}>Default</button>
-          <br />
+              }))}>Default</button> */}
+          <p>-10 dB</p>
         </div>);
     })
     return arr;
@@ -65,7 +69,7 @@ export default function LoadEffects() {
     for (let key in reverb) {
       arr.push(
         <div className={styles.params_container}>
-          <p>{key.charAt(0).toUpperCase()+key.slice(1)}</p>
+          <strong>{key.charAt(0).toUpperCase()+key.slice(1)}</strong>
           <p>{Math.floor(reverb[key] * 100)} %</p>
           <input type="range" className={styles.params}
             id={key}
@@ -74,10 +78,10 @@ export default function LoadEffects() {
             value={reverb[key]}
             step={params[key][2]}
             onChange={(key => (e: any) => setReverb({ ...reverb, [key]: parseFloat(e.currentTarget.value) }))(key)} />
+          <p>{params[key][0]} %</p>
         </div>
       );
     }
-    arr.push(<button className={styles.params_button} onClick={()=>setReverb(defaultReverb)}>Default</button>)
     return arr;
   }
   return (
@@ -85,22 +89,24 @@ export default function LoadEffects() {
       <div className={styles.effects_containers}>
         <div className={styles.effects_container}>
           <h1>Compressor</h1>
-          <p>recommend you to turn down the volume.</p>
-          <div className={styles.effects_container_adjust}>
+          <div className={styles.effects_container_adjust_comp}>
             {renderComp()}
           </div>
+          <button className={styles.params_button} onClick={()=>setComp(defaultComp)}>Default</button>
         </div>
         <div className={styles.effects_container}>
           <h1>Equalizer</h1>
-          <div className={styles.effects_container_adjust}>
+          <div className={styles.effects_container_adjust_eq}>
             {renderEq()}
           </div>
+          <button className={styles.params_button} onClick={()=>setEq(setDefaultEq())}>Default</button>
         </div>
         <div className={styles.effects_container}>
           <h1>Reverb</h1>
-          <div className={styles.effects_container_adjust}>
+          <div className={styles.effects_container_adjust_reverb}>
             {renderReverb()}
           </div>
+          <button className={styles.params_button} onClick={()=>setReverb(defaultReverb)}>Default</button>
         </div>
       </div>
     </div>

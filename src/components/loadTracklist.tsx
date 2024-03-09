@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useContext } from "react";
 import { tracklist } from "../assets/tracklist"
 import { MusicContext } from "../contexts/musicContext";
@@ -6,7 +6,24 @@ import styles from '../styles/tracks.module.scss';
 
 export default function LoadTracklist() {
   const ctx = useContext<any>(MusicContext);
-  const [maxImgIdx, setMaxImgIdx] = useState(3); // controls the rendering limit of image,
+  const [ImgIdx, setImgIdx] = useState < { [key: string]: number }>({taeon:3, arbor:3}); // controls the rendering limit of image,
+  const [maxImgIdx, setMaxImgIdx] = useState(4); //rendering amount when clicked See More button
+
+  //responsive loading
+  useEffect(() => {
+    if (window.innerWidth < 650) {
+      setMaxImgIdx(2);
+      setImgIdx({taeon:0, arbor:0});
+    }
+    else if (window.innerWidth < 1000) {
+      setMaxImgIdx(2);
+      setImgIdx({taeon:1, arbor:1});
+    }
+    else if (window.innerWidth < 1300) {
+      setMaxImgIdx(3);
+      setImgIdx({taeon:2, arbor:2});
+    }
+  }, []);
 
   const renderTracklists = () => {
     let arr = [];
@@ -16,7 +33,7 @@ export default function LoadTracklist() {
           <hr />
           <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
           <div className={styles.tracklist}>
-            {tracklist[key].map((music, idx) => idx <= maxImgIdx ? (<div key={music.title} className={styles.image_container}>
+            {tracklist[key].map((music, idx) => idx <= ImgIdx[key] ? (<div key={music.title} className={styles.image_container}>
               <img className={styles.image} key={music.title} src={music.img} alt={music.title} onClick={() => {
                 ctx.setMusicIdx({ artist: key, idx: idx })
                 ctx.setSelectedMusic(music)
@@ -24,7 +41,7 @@ export default function LoadTracklist() {
               <p className={styles.image_title}>{music.title}</p>
             </div>) : <></>)}
           </div>
-          {key === 'taeon' ? <button className={styles.button} onClick={() => setMaxImgIdx(prev => prev + 4)}>See More</button> : <></>}
+          {tracklist[key].length > ImgIdx[key]+1 ? <button key={key} value={key} className={styles.button} onClick={(e: any) => setImgIdx({ ...ImgIdx, [e.currentTarget.value]: ImgIdx[e.currentTarget.value] + maxImgIdx })}>See More</button> : <></>}
         </div>
       );
     }

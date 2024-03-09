@@ -5,6 +5,8 @@
   animation: slideUp 2s ease forwards;
   position: fixed;
   margin: 0 auto;
+  padding-left: 4vw;
+  padding-right: 4vw;
   left: 0;
   right: 0;
   bottom: 4vh;
@@ -21,8 +23,8 @@
 }
 
 .title{
+  // line-height: 1;
   font-size:0.9em;
-  margin-right:4vw;
   font-weight:600;
   white-space: nowrap;
   overflow: hidden;
@@ -49,10 +51,6 @@
   font-size: 2em;
   margin-right:0.5vw;
   cursor:pointer;
-  &_first{
-    @extend .buttons;
-    margin-left:4vw;
-  }
   &_container{
     &_play, &_volume, &_panning{
       position: relative;
