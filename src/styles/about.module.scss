@@ -2,10 +2,17 @@
 
 .about{
   text-align: center;
-  line-height: 1;
+  line-height: 2;
   @media(min-width:1200px){
     padding-bottom: 20vh;
   }
+}
+
+.link{
+  cursor:pointer;
+  // font-weight: 600;
+  text-decoration: underline;
+  color:#626262;
 }
 
 .img{
