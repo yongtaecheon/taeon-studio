@@ -1,3 +1,4 @@
+import { tracklistType } from './../contexts/musicContext';
 import taeon1 from './music/0116sketch.mp3';
 import taeon2 from './music/cant take my eyes_master0820.mp3';
 import taeon3 from './music/greed.mp3';
@@ -28,7 +29,7 @@ import artwork13 from './img/artwork13.jpg';
 import artwork14 from './img/artwork14.jpg';
 
 
-export const tracklist = {
+export const tracklist:{[key:string]:tracklistType[]} = {
   taeon: [
     { title: '0116sketch', music: taeon1, img: artwork1 },
     { title: `Can't take my eyes off of you`, music: taeon2, img: artwork2 },

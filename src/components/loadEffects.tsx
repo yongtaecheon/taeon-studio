@@ -16,11 +16,10 @@ export default function LoadEffects() {
       attack: ['0', '1', '0.01'], release: ['0', '1', '0.01'],
       knee: ['0', '40', '1'], outputGain: ['0', '2', '0.01']
     };
-    let key: string;
-    for (key in comp) {
+    for (let key in comp) {
       arr.push(
-        <div>
-          <p>{key}</p>
+        <div className={styles.params_container}>
+          <p>{key.charAt(0).toUpperCase()+key.slice(1)}</p>
           <p>{key === 'outputGain' ? `${Math.floor(comp[key] * 100)} %` :
             (key === 'attack' || key === 'release') ? `${comp[key]} ms` :
               key === 'ratio' ? `${comp[key]} : 1` :
@@ -35,38 +34,38 @@ export default function LoadEffects() {
         </div>
       );
     }
-    arr.push(<button onClick={()=>setComp(defaultComp)}>Default</button>)
+    arr.push(<button className={styles.params_button} onClick={()=>setComp(defaultComp)}>Default</button>)
     return arr;
   }
   const renderEq = () => {
     let arr = eq.map((q: any, idx: number) => {
-      return <div>
-        <p>{q.freq} Hz</p>
-        <input className={styles.params} type="range" id={q.type} min="-10" max="10" value={q.gain} step="0.1" onChange={
-          (e: any) =>
-          setEq(Object.values({
-            ...eq,
-            [idx]: { gain: parseFloat(e.currentTarget.value), type: q.type, freq:q.freq }
-          }))} />
-        <button onClick={
-          () =>
-          setEq(Object.values({
-            ...eq,
-            [idx]: { gain: 0, type: q.type, freq:q.freq }
-          }))}>Default</button>
-        <br/>
-      </div>
+      return (
+        <div className={styles.params_container}>
+          <p>{q.freq} Hz</p>
+          <input className={styles.params} type="range" id={q.type} min="-10" max="10" value={q.gain} step="0.1" onChange={
+            (e: any) =>
+              setEq(Object.values({
+                ...eq,
+                [idx]: { gain: parseFloat(e.currentTarget.value), type: q.type, freq: q.freq }
+              }))} />
+          <button className={styles.params_button} onClick={
+            () =>
+              setEq(Object.values({
+                ...eq,
+                [idx]: { gain: 0, type: q.type, freq: q.freq }
+              }))}>Default</button>
+          <br />
+        </div>);
     })
     return arr;
   }
   const renderReverb = () => {
     let arr = [];
-    let key: string;
     const params:any = {mix: ['0','1','0.01'], time: ['0.01','1','0.01'], decay: ['0.01','1','0.01']}
-    for (key in reverb) {
+    for (let key in reverb) {
       arr.push(
-        <div>  
-          <p>{key}</p>
+        <div className={styles.params_container}>
+          <p>{key.charAt(0).toUpperCase()+key.slice(1)}</p>
           <p>{Math.floor(reverb[key] * 100)} %</p>
           <input type="range" className={styles.params}
             id={key}
@@ -78,7 +77,7 @@ export default function LoadEffects() {
         </div>
       );
     }
-    arr.push(<button onClick={()=>setReverb(defaultReverb)}>Default</button>)
+    arr.push(<button className={styles.params_button} onClick={()=>setReverb(defaultReverb)}>Default</button>)
     return arr;
   }
   return (

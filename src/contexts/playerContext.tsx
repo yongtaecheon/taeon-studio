@@ -1,6 +1,6 @@
 import { useState, createContext } from "react";
 
-export interface Comp{
+export interface Comp {
   threshold: number, //-100~0
   ratio: number, //1~20
   attack: number, //0~1
@@ -34,7 +34,7 @@ export interface PlayerContextType{
   panning: number,
   setPanning: (value: number) => void,
 }
-export const eqFreqs = [60, 250, 700, 1500, 2500, 4000, 7500, 15000]; //8-band EQ
+export const eqFreqs:number[] = [60, 250, 700, 1500, 2500, 4000, 7500, 15000]; //8-band EQ
 export const defaultComp:Comp = { threshold: 0, ratio: 1, attack: 0, release: 0, knee: 0, outputGain: 1 }
 export const defaultReverb: Reverb = { mix: 0, time: 0.01, decay: 0.01 };
 
