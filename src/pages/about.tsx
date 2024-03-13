@@ -9,9 +9,13 @@ export default function About() {
       <img className={styles.img} src={img1} alt="my img"></img>
       <div className={styles.content}>
         <h1>Music Careers</h1>
-        <p className={styles.link}><a href="https://www.youtube.com/@tae_on">Taeon</a><br/>
-          <a href="https://www.youtube.com/@arbor_official">Arbor</a><br/>
-          <a href="https://www.youtube.com/@vieve1784">Vieve</a>
+        <p className={styles.link}>
+          <a href="https://www.youtube.com/@tae_on">Taeon</a><br />
+          <iframe className={styles.iframe} src="https://www.youtube.com/embed/r0qoxzJckIU?si=k2ouGd2FOhYBX4Oa" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe><br/>
+          <a href="https://www.youtube.com/@arbor_official">Arbor</a><br />
+          <iframe className={styles.iframe} src="https://www.youtube.com/embed/-AOLwjv9uD0?si=xcawa0hKZh0tbALB" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe><br/>
+          <a href="https://www.youtube.com/@vieve1784">Vieve</a><br/>
+          <iframe className={styles.iframe} src="https://www.youtube.com/embed/95arMZc3OLU?si=ox9yq9n1_zWyHSbB" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
         </p>
         <h1>Gears</h1>
         <p>
